@@ -52,13 +52,6 @@ def choice_checker(question, valid_list, error):
 def instructions():
     print("**** How to Play ****")
     print()
-    print("Enter how many rounds you would like to play.")
-    print("Press <enter> for continuous mode.")
-    print("You can quit at any time by typing in 'xxx'.")
-    print("Choose rock, paper, scissors or r, p, s.")
-    print("You can choose to see your end game summary at the end of the game.")
-    print("Good luck and have fun :D")
-    print()
     return ""
 
 
@@ -76,6 +69,28 @@ def statement_generator(statement, decoration):
     return ""
 
 
+# checks users enter an integer between a low and high number
+def num_check(question, low):
+
+    error = f"Please enter a whole number above {low}\n"
+
+    while True:
+        try:
+            # Ask the question
+            response = int(input(question))
+
+            # if the amount is too low / too high give error
+            if low < response:
+                return response
+
+            # Output an error
+            else:
+                print(error)
+
+        except ValueError:
+            print(error)
+
+
 # Main Routine
 
 # List of valid responses
@@ -83,7 +98,7 @@ yes_no_list = ["yes", "no", "y", "n"]
 game_summary = []
 
 # Error
-error = "Please enter either yes or no"
+y_n_error = "Please enter either yes or no"
 # Title
 statement_generator("Welcome to the Higher Lower Game", "*")
 print()
@@ -92,7 +107,7 @@ print()
 # If 'yes', show instructions
 played_before = choice_checker("Have you played the game before? "
                                , yes_no_list,
-                               error)
+                               y_n_error)
 
 if played_before == "no":
     instructions()
@@ -100,7 +115,11 @@ if played_before == "no":
 # Ask user for # of rounds then loop...
 rounds_played = 0
 
-game_summary = []
+# Lists
+
+# Errrors
+low_high_error = "Please choose an integer that is " \
+                 "larger than low number"
 
 # Ask user for # of rounds, <enter> for infinite mode
 rounds = check_rounds()
@@ -121,7 +140,17 @@ while end_game == "no":
     print(heading)
     print()
 
-    low_num = "Please choose the low number: "
-    high_num = "Please choose the high number: "
-    if low_num >= high_num:
-        error
+    quit = input("Press <enter> to continue or 'xxx' to quit: ")
+    if quit == "xxx":
+        break
+
+    low_num = num_check("Please choose the low number: : ", 0)
+
+    high_num = num_check("Please choose the high number: ", low_num)
+
+
+
+
+
+    if rounds_played == rounds:
+        break
