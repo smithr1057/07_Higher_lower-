@@ -1,3 +1,4 @@
+import random
 # Functions
 
 
@@ -70,25 +71,41 @@ def statement_generator(statement, decoration):
 
 
 # checks users enter an integer between a low and high number
-def num_check(question, low):
+def int_check(question, low=None, high=None):
+    situation = ""
 
-    error = f"Please enter a whole number above {low}\n"
+    if low is not None and high is not None:
+        situation = "both"
+    elif low is not None and high is None:
+        situation = "low only"
 
     while True:
         try:
             # Ask the question
             response = int(input(question))
 
-            # if the amount is too low / too high give error
-            if low < response:
-                return response
+            # Checks input is not too high or
+            # too low if a both upper and
+            # lower bounds are specified
+            if situation == "both":
+                if response < low or response > high:
+                    print("Please enter a number between "
+                          f"{low} and {high}")
+                    continue
 
-            # Output an error
-            else:
-                print(error)
+            # Checks input is not too low
+            elif situation == "low only":
+                if response < low:
+                    print("Please enter a number that is more"
+                          f"than (or equal to) {low}")
+                    continue
 
+            return response
+
+        # Checks input is an integer
         except ValueError:
-            print(error)
+            print("Please enter an integer")
+            continue
 
 
 # Main Routine
@@ -99,6 +116,8 @@ game_summary = []
 
 # Error
 y_n_error = "Please enter either yes or no"
+low_high_error = "Please choose an integer that is " \
+                 "larger than low number"
 # Title
 statement_generator("Welcome to the Higher Lower Game", "*")
 print()
@@ -114,12 +133,9 @@ if played_before == "no":
 
 # Ask user for # of rounds then loop...
 rounds_played = 0
-
-# Lists
-
-# Errrors
-low_high_error = "Please choose an integer that is " \
-                 "larger than low number"
+rounds_lost = 0
+rounds_won = 0
+num_guesses = 0
 
 # Ask user for # of rounds, <enter> for infinite mode
 rounds = check_rounds()
@@ -144,13 +160,26 @@ while end_game == "no":
     if quit == "xxx":
         break
 
-    low_num = num_check("Please choose the low number: : ", 0)
+    while result == wrong:
+        low_num = int_check("Please choose the low number: : ", 0)
 
-    high_num = num_check("Please choose the high number: ", low_num)
+        high_num = int_check("Please choose the high number: ", low_num)
 
+        random.randint(low_num, high_num)
 
+        user_guess = int_check("Please enter your guess: ", low_num, high_num)
 
+        if user_guess == random:
+            rounds_played = + 1
+            rounds_won = + 1
+            result = "Won"
+            continue
 
+        else:
+            print("try again")
+            rounds_played = + 1
+            num_guesses = + 1
+            result = "Wrong"
 
     if rounds_played == rounds:
         break

@@ -1,31 +1,48 @@
 # Functions
 
 # checks users enter an integer between a low and high number
-def num_check(question, low):
+def int_check(question, low=None, high=None):
 
-    error = f"Please enter a whole number above {low}\n"
+    situation = ""
+
+    if low is not None and high is not None:
+        situation = "both"
+    elif low is not None and high is None:
+        situation = "low only"
 
     while True:
         try:
             # Ask the question
             response = int(input(question))
 
-            # if the amount is too low / too high give error
-            if low < response:
-                return response
+            # Checks input is not too high or
+            # too low if a both upper and
+            # lower bounds are specified
+            if situation == "both":
+                if response < low or response > high:
+                    print("Please enter a number between "
+                          f"{low} and {high}")
+                    continue
 
-            # Output an error
-            else:
-                print(error)
+            # Checks input is not too low
+            elif situation == "low only":
+                if response < low:
+                    print("Please enter a number that is more"
+                          f"than (or equal to) {low}")
+                    continue
 
+            return response
+
+        # Checks input is an integer
         except ValueError:
-            print(error)
+            print("Please enter an integer")
+            continue
 
 
 # Main Routine
 
-low_num = num_check("Please choose the low number: : ", 0)
+low_num = int_check("Please choose the low number: : ", 0)
 
-high_num = num_check("Please choose the high number: ", low_num)
+high_num = int_check("Please choose the high number: ", low_num)
 
 
