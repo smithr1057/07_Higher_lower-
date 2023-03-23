@@ -28,11 +28,11 @@ def num_check(question, low, high):
 low_num = 20
 high_num = 50
 
-random_num = random.randint(low_num, high_num)
+sec_num = random.randint(low_num, high_num)
 
 num_guess = num_check("Please enter your guess: ", low_num, high_num)
 
-if num_guess == random_num:
+if num_guess == sec_num:
     print("Congrats you won")
 
 else:

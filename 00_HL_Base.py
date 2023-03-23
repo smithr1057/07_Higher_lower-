@@ -6,6 +6,7 @@ import random
 def check_rounds():
     while True:
         response = input("How many rounds: ")
+        print()
 
         round_error = "Please type either <enter> " \
                       "or an integer that is more than 0\n"
@@ -154,32 +155,61 @@ while end_game == "no":
                   f" of {rounds} ***"
 
     print(heading)
-    print()
 
     quit = input("Press <enter> to continue or 'xxx' to quit: ")
     if quit == "xxx":
         break
 
-    while result == wrong:
-        low_num = int_check("Please choose the low number: : ", 0)
+    low_num = int_check("Please choose the low number: : ", 0)
 
-        high_num = int_check("Please choose the high number: ", low_num)
+    high_num = int_check("Please choose the high number: ", low_num)
 
-        random.randint(low_num, high_num)
+    sec_num = random.randint(low_num, high_num)
+    user_guess = ""
+    while user_guess != sec_num and guesses_left >= 1:
 
-        user_guess = int_check("Please enter your guess: ", low_num, high_num)
+        user_guess = int_check("Please enter your guess: ",
+                               low_num, high_num)
 
-        if user_guess == random:
-            rounds_played = + 1
-            rounds_won = + 1
-            result = "Won"
+        # checks that guess is not a duplicate
+        if user_guess in already_guessed:
+            print(f"You already guessed that number! Please try again. You *still* have {guesses_left} guesses left")
             continue
 
+        guesses_left -= 1
+        already_guessed.append(user_guess)
+
+        if guesses_left >= 1:
+
+            if user_guess < sec_num:
+                print("Too low, try again")
+                num_guesses = + 1
+
+            if user_guess > sec_num:
+                print("To high, try again")
+                num_guesses = + 1
         else:
-            print("try again")
-            rounds_played = + 1
-            num_guesses = + 1
-            result = "Wrong"
+            if user_guess < sec_num:
+                print("Too low!")
+            elif user_guess < sec_num:
+                print("Too high!")
+
+    if user_guess == sec_num:
+        if guesses_left == guesses_allowed:
+            print("Amazing!! You got the number first try :D")
+
+        else:
+            print("Well done, you got the number :)")
+
+        num_guesses = + 1
+        rounds_won = + 1
+        result = "Won"
+
+    rounds_played = + 1
+    print(f"You {result}")
+    print()
+
 
     if rounds_played == rounds:
         break
+
