@@ -42,7 +42,7 @@ def int_check(question, low=None, high=None):
 sec_num = 7
 guesses_allowed = 5
 low_num = 1
-high_num = 50
+high_num = 10
 num_guesses = 0
 
 already_guessed = []

@@ -1,4 +1,5 @@
 import random
+import math
 # Functions
 
 
@@ -138,6 +139,9 @@ rounds_lost = 0
 rounds_won = 0
 num_guesses = 0
 
+
+already_guessed = []
+
 # Ask user for # of rounds, <enter> for infinite mode
 rounds = check_rounds()
 
@@ -145,7 +149,6 @@ end_game = "no"
 while end_game == "no":
 
     # Start the game play loop
-
     # Rounds Heading
     if rounds == "":
         heading = f"*** Continuous Mode: Round" \
@@ -160,53 +163,87 @@ while end_game == "no":
     if quit == "xxx":
         break
 
-    low_num = int_check("Please choose the low number: : ", 0)
+    low_num = int_check("Please choose the low number:  ", 0)
 
     high_num = int_check("Please choose the high number: ", low_num)
 
     sec_num = random.randint(low_num, high_num)
+
+    # Finds the max amount of guesses the user gets
+    range = high_num - low_num + 1
+    max_raw = math.log2(range)
+    max_upped = math.ceil(max_raw)
+    max_guesses = max_upped + 1
+
+    guesses_left = max_guesses
+
+
     user_guess = ""
+
     while user_guess != sec_num and guesses_left >= 1:
+
+        if guesses_left == 0:
+            continue
+
+        # Print how many guesses user has left
+        if max_guesses > 1:
+            print(f"You have {max_guesses} guesses")
+
+        elif max_guesses == 1:
+            print(f"You have {max_guesses} guess")
 
         user_guess = int_check("Please enter your guess: ",
                                low_num, high_num)
 
         # checks that guess is not a duplicate
         if user_guess in already_guessed:
-            print(f"You already guessed that number! Please try again. You *still* have {guesses_left} guesses left")
+            print(f"You already guessed that number!"
+                  f" Please try again. You *still* have"
+                  f" {guesses_left} guesses left")
             continue
 
         guesses_left -= 1
         already_guessed.append(user_guess)
 
+        # Compares user guess and secret number to
+        # respond if user is to low or to high
         if guesses_left >= 1:
 
             if user_guess < sec_num:
                 print("Too low, try again")
-                num_guesses = + 1
+                num_guesses += 1
 
             if user_guess > sec_num:
                 print("To high, try again")
-                num_guesses = + 1
+                num_guesses += 1
         else:
             if user_guess < sec_num:
                 print("Too low!")
+                num_guesses += 1
             elif user_guess < sec_num:
                 print("Too high!")
+                num_guesses += 1
 
+    # Unique relpy if user gets the number first try
     if user_guess == sec_num:
-        if guesses_left == guesses_allowed:
+        if guesses_left == max_guesses:
             print("Amazing!! You got the number first try :D")
 
         else:
             print("Well done, you got the number :)")
 
-        num_guesses = + 1
-        rounds_won = + 1
+        num_guesses += 1
+        rounds_won += 1
         result = "Won"
 
+    #
     rounds_played = + 1
-    print(f"You {result}")
+
+    if num_guesses > 1:
+        print(f"You go the number in {num_guesses} guesses")
+
+    elif num_guesses == 1:
+        print(f"You go the number in {num_guesses} guess")
     print()
 
 
