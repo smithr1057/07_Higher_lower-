@@ -59,15 +59,20 @@ def instructions():
 
 
 # Adds decorations to selected text
-def statement_generator(statement, decoration):
+def statement_generator(statement, decoration, lines=None):
     sides = decoration * 3
 
     statement = f"{sides} {statement} {sides}"
     top_bottom = decoration * len(statement)
 
-    print(top_bottom)
-    print(statement)
-    print(top_bottom)
+    # use 3 lines for headings / heavy decoration
+    if lines == 3:
+        print(top_bottom)
+        print(statement)
+        print(top_bottom)
+    else:
+        # default is one single line
+        print(statement)
 
     return ""
 
@@ -121,7 +126,7 @@ y_n_error = "Please enter either yes or no"
 low_high_error = "Please choose an integer that is " \
                  "larger than low number"
 # Title
-statement_generator("Welcome to the Higher Lower Game", "*")
+statement_generator("Welcome to the Higher Lower Game", "*", 3)
 print()
 
 # Ask user if they have played before
@@ -137,10 +142,6 @@ if played_before == "no":
 rounds_played = 0
 rounds_lost = 0
 rounds_won = 0
-num_guesses = 0
-
-
-already_guessed = []
 
 # Ask user for # of rounds, <enter> for infinite mode
 rounds = check_rounds()
@@ -160,14 +161,17 @@ while end_game == "no":
     print(heading)
 
     quit = input("Press <enter> to continue or 'xxx' to quit: ")
+    print()
     if quit == "xxx":
         break
 
     low_num = int_check("Please choose the low number:  ", 0)
-
     high_num = int_check("Please choose the high number: ", low_num)
 
     sec_num = random.randint(low_num, high_num)
+    already_guessed = []
+
+    num_guesses = 0
 
     # Finds the max amount of guesses the user gets
     range = high_num - low_num + 1
@@ -192,6 +196,7 @@ while end_game == "no":
         elif max_guesses == 1:
             print(f"You have {max_guesses} guess")
 
+        print()
         user_guess = int_check("Please enter your guess: ",
                                low_num, high_num)
 
@@ -203,7 +208,9 @@ while end_game == "no":
             continue
 
         guesses_left -= 1
+
         already_guessed.append(user_guess)
+
 
         # Compares user guess and secret number to
         # respond if user is to low or to high
@@ -219,34 +226,37 @@ while end_game == "no":
         else:
             if user_guess < sec_num:
                 print("Too low!")
+                print("You lost, better luck next time :D")
+                rounds_lost += 1
                 num_guesses += 1
+
             elif user_guess < sec_num:
                 print("Too high!")
+                print("You lost, better luck next time :D")
+                rounds_lost += 1
                 num_guesses += 1
+
+
+
 
     # Unique relpy if user gets the number first try
     if user_guess == sec_num:
+        num_guesses += 1
         if guesses_left == max_guesses:
             print("Amazing!! You got the number first try :D")
 
         else:
-            print("Well done, you got the number :)")
+            print(f"You got the number in {num_guesses} guesses")
+        print()
 
-        num_guesses += 1
         rounds_won += 1
         result = "Won"
 
     #
-    rounds_played = + 1
-
-    if num_guesses > 1:
-        print(f"You go the number in {num_guesses} guesses")
-
-    elif num_guesses == 1:
-        print(f"You go the number in {num_guesses} guess")
-    print()
-
+    rounds_played += 1
 
     if rounds_played == rounds:
         break
+
+print("Thanks for playing the Higher Lower Game")
 
