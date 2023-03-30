@@ -165,8 +165,12 @@ while end_game == "no":
     if quit == "xxx":
         break
 
-    low_num = int_check("Please choose the low number:  ", 0)
-    high_num = int_check("Please choose the high number: ", low_num)
+    if rounds_played == 0:
+        low_num = int_check("Please choose the low number:  ", 0)
+        high_num = int_check("Please choose the high number: ", low_num)
+
+    else:
+        print(f"Number is between {low_num} and {high_num}")
 
     sec_num = random.randint(low_num, high_num)
     already_guessed = []
@@ -190,11 +194,11 @@ while end_game == "no":
             continue
 
         # Print how many guesses user has left
-        if max_guesses > 1:
-            print(f"You have {max_guesses} guesses")
+        if guesses_left > 1:
+            print(f"You have {guesses_left} guesses")
 
-        elif max_guesses == 1:
-            print(f"You have {max_guesses} guess")
+        elif guesses_left == 1:
+            print(f"You have {guesses_left} guess")
 
         print()
         user_guess = int_check("Please enter your guess: ",
@@ -226,16 +230,16 @@ while end_game == "no":
         else:
             if user_guess < sec_num:
                 print("Too low!")
-                print("You lost, better luck next time :D")
+                print("You lost, better luck next time")
                 rounds_lost += 1
                 num_guesses += 1
 
             elif user_guess < sec_num:
                 print("Too high!")
-                print("You lost, better luck next time :D")
+                print("You lost, better luck next time")
                 rounds_lost += 1
                 num_guesses += 1
-
+            result = "Lost"
 
 
 
@@ -246,17 +250,60 @@ while end_game == "no":
             print("Amazing!! You got the number first try :D")
 
         else:
-            print(f"You got the number in {num_guesses} guesses")
+            print(f"** Congrats you got the number "
+                  f"in {num_guesses} guesses **")
         print()
 
         rounds_won += 1
         result = "Won"
 
-    #
+    outcome = f"Round {rounds_played + 1}: {result}"
+    game_summary.append(outcome)
+    print()
+
     rounds_played += 1
 
     if rounds_played == rounds:
         break
 
-print("Thanks for playing the Higher Lower Game")
+
+
+if rounds_played > 1:
+    # Ask user if they want to see their game history
+    # if 'yes' show game history
+    show_stats = choice_checker("Would you like to see your"
+                                " end game history? "
+                                , yes_no_list, y_n_error)
+
+    # Calculate stats and print them out
+    if show_stats == "yes":
+
+
+
+        # Calculate game stat
+        percent_win = rounds_won / rounds_played * 100
+        percent_lose = rounds_lost / rounds_played * 100
+
+        # Displays game history
+        print()
+        print("***** Game History *****")
+        for game in game_summary:
+            print(game)
+
+        print()
+
+        # displays game stats with % values to the nearest whole number
+        print(" ***** Game Statistics *****")
+        print(f"Win: {rounds_won}, {percent_win:.0f}% \nLoss: {rounds_lost}, "
+              f"{percent_lose:.0f}%")
+
+
+    print()
+    print("Thanks for playing the higher lower game :D")
+
+
+# If user hasn't played a round comment
+# Don't give them the option of game history
+elif rounds_played < 1:
+    print("Maybe play the game next time :)")
 
