@@ -53,7 +53,25 @@ def choice_checker(question, valid_list, error):
 
 # Displays instructions
 def instructions():
+    print()
     print("**** How to Play ****")
+    print()
+    print("Choose how many rounds you want to "
+          "play (press <enter> for continuous mode)")
+    print()
+    print("Choose your lowest and highest number")
+    print("Keep in mind this will stay with you for the rest of the game")
+    print()
+    print("You will have a set amount of guesses "
+          "to get the correct number")
+    print()
+    print("You can enter 'xxx' at the start of any round to quit")
+    print()
+    print("You are able to see your game statistics after each game")
+    print()
+    print("At the end of the game you may choose to begin a new game")
+    print()
+    print("Good Luck :D")
     print()
     return ""
 
@@ -118,8 +136,7 @@ def int_check(question, low=None, high=None):
 # Main Routine
 
 # List of valid responses
-yes_no_list = ["yes", "no", "y", "n"]
-game_summary = []
+yes_no_list = ["yes", "no"]
 
 # Error
 y_n_error = "Please enter either yes or no"
@@ -138,172 +155,181 @@ played_before = choice_checker("Have you played the game before? "
 if played_before == "no":
     instructions()
 
-# Ask user for # of rounds then loop...
-rounds_played = 0
-rounds_lost = 0
-rounds_won = 0
+play_again = "yes"
+while play_again == "yes":
 
-# Ask user for # of rounds, <enter> for infinite mode
-rounds = check_rounds()
+    # Ask user for # of rounds then loop...
+    rounds_played = 0
+    rounds_lost = 0
+    rounds_won = 0
 
-end_game = "no"
-while end_game == "no":
+    game_summary = []
+    guess_summary = []
 
-    # Start the game play loop
-    # Rounds Heading
-    if rounds == "":
-        heading = f"*** Continuous Mode: Round" \
-                  f" {rounds_played + 1} ***"
-    else:
-        heading = f"*** Round {rounds_played + 1}" \
-                  f" of {rounds} ***"
+    # Ask user for # of rounds, <enter> for infinite mode
+    rounds = check_rounds()
 
-    print(heading)
+    end_game = "no"
+    while end_game == "no":
 
-    quit = input("Press <enter> to continue or 'xxx' to quit: ")
-    print()
-    if quit == "xxx":
-        break
-
-    if rounds_played == 0:
-        low_num = int_check("Please choose the low number:  ", 0)
-        high_num = int_check("Please choose the high number: ", low_num)
-
-    else:
-        print(f"Number is between {low_num} and {high_num}")
-
-    sec_num = random.randint(low_num, high_num)
-    already_guessed = []
-
-    num_guesses = 0
-
-    # Finds the max amount of guesses the user gets
-    range = high_num - low_num + 1
-    max_raw = math.log2(range)
-    max_upped = math.ceil(max_raw)
-    max_guesses = max_upped + 1
-
-    guesses_left = max_guesses
-
-
-    user_guess = ""
-
-    while user_guess != sec_num and guesses_left >= 1:
-
-        if guesses_left == 0:
-            continue
-
-        # Print how many guesses user has left
-        if guesses_left > 1:
-            print(f"You have {guesses_left} guesses")
-
-        elif guesses_left == 1:
-            print(f"You have {guesses_left} guess")
-
-        print()
-        user_guess = int_check("Please enter your guess: ",
-                               low_num, high_num)
-
-        # checks that guess is not a duplicate
-        if user_guess in already_guessed:
-            print(f"You already guessed that number!"
-                  f" Please try again. You *still* have"
-                  f" {guesses_left} guesses left")
-            continue
-
-        guesses_left -= 1
-
-        already_guessed.append(user_guess)
-
-
-        # Compares user guess and secret number to
-        # respond if user is to low or to high
-        if guesses_left >= 1:
-
-            if user_guess < sec_num:
-                print("Too low, try again")
-                num_guesses += 1
-
-            if user_guess > sec_num:
-                print("To high, try again")
-                num_guesses += 1
+        # Start the game play loop
+        # Rounds Heading
+        if rounds == "":
+            heading = f"*** Continuous Mode: Round" \
+                      f" {rounds_played + 1} ***"
         else:
-            if user_guess < sec_num:
-                print("Too low!")
-                print("You lost, better luck next time")
-                rounds_lost += 1
-                num_guesses += 1
+            heading = f"*** Round {rounds_played + 1}" \
+                      f" of {rounds} ***"
 
-            elif user_guess < sec_num:
-                print("Too high!")
-                print("You lost, better luck next time")
-                rounds_lost += 1
-                num_guesses += 1
-            result = "Lost"
+        print(heading)
 
+        quit_game = input("Press <enter> to continue or 'xxx' to quit: ")
+        print()
+        if quit_game == "xxx":
+            break
 
-
-    # Unique relpy if user gets the number first try
-    if user_guess == sec_num:
-        num_guesses += 1
-        if guesses_left == max_guesses:
-            print("Amazing!! You got the number first try :D")
+        if rounds_played == 0:
+            low_num = int_check("Please choose the low number:  ", 0)
+            high_num = int_check("Please choose the high number: ", low_num)
 
         else:
-            print(f"** Congrats you got the number "
-                  f"in {num_guesses} guesses **")
+            print(f"Number is between {low_num} and {high_num}")
+
+        sec_num = random.randint(low_num, high_num)
+        # print("spoiler alert", sec_num)
+        # print()
+        already_guessed = []
+
+        num_guesses = 0
+
+        # Finds the max amount of guesses the user gets
+        range = high_num - low_num + 1
+        max_raw = math.log2(range)
+        max_upped = math.ceil(max_raw)
+        max_guesses = max_upped + 1
+
+        guesses_left = max_guesses
+
+        user_guess = ""
+
+        while user_guess != sec_num and guesses_left >= 1:
+
+            if guesses_left == 0:
+                continue
+
+            # Print how many guesses user has left
+            if guesses_left > 1:
+                print(f"You have {guesses_left} guesses")
+
+            elif guesses_left == 1:
+                print(f"You have {guesses_left} guess")
+
+            print()
+            user_guess = int_check("Please enter your guess: ",
+                                   low_num, high_num)
+
+            # checks that guess is not a duplicate
+            if user_guess in already_guessed:
+                print(f"You already guessed that number!"
+                      f" Please try again. You *still* have"
+                      f" {guesses_left} guesses left")
+                continue
+
+            guesses_left -= 1
+
+            already_guessed.append(user_guess)
+
+            # Compares user guess and secret number to
+            # respond if user is too low or to high
+            if guesses_left >= 1:
+
+                if user_guess < sec_num:
+                    print("Too low, try again")
+                    num_guesses += 1
+
+                if user_guess > sec_num:
+                    print("To high, try again")
+                    num_guesses += 1
+            else:
+                if user_guess < sec_num:
+                    print("Too low!")
+                    print("You lost, better luck next time")
+                    rounds_lost += 1
+                    num_guesses += 1
+
+                elif user_guess < sec_num:
+                    print("Too high!")
+                    print("You lost, better luck next time")
+                    rounds_lost += 1
+                    num_guesses += 1
+                result = "lost"
+
+        # Unique relpy if user gets the number first try
+        if user_guess == sec_num:
+            num_guesses += 1
+            if guesses_left == max_guesses:
+                print("Amazing!! You got the number first try :D")
+
+            else:
+                print(f"** Congrats you got the number "
+                      f"in {num_guesses} guesses **")
+
+            rounds_won += 1
+            result = "won"
+
+        if result == "lost":
+            outcome = f"Round {rounds_played + 1}: " \
+                      f"You {result} (to many guesses)"
+
+        else:
+            outcome = f"Round {rounds_played + 1}: You {result} in " \
+                      f"{num_guesses} guesses"
+        game_summary.append(outcome)
         print()
 
-        rounds_won += 1
-        result = "Won"
+        rounds_played += 1
 
-    outcome = f"Round {rounds_played + 1}: {result}"
-    game_summary.append(outcome)
+        if rounds_played == rounds:
+            break
+
+    if rounds_played >= 1:
+        # Ask user if they want to see their game history
+        # if 'yes' show game history
+        show_stats = choice_checker("Would you like to see your"
+                                    " end game history? "
+                                    , yes_no_list, y_n_error)
+
+        # Calculate stats and print them out
+        if show_stats == "yes":
+
+            # Calculate game stat
+            percent_win = rounds_won / rounds_played * 100
+            percent_lose = rounds_lost / rounds_played * 100
+
+            # Displays game history
+            print()
+            print("***** Game History *****")
+            for game in game_summary:
+                print(game)
+
+            print()
+
+            # displays game stats with % values to the nearest whole number
+            print(" ***** Game Statistics *****")
+            print(f"Win: {rounds_won}, {percent_win:.0f}% \n"
+                  f"Loss: {rounds_lost}, "
+                  f"{percent_lose:.0f}%")
+
+    # Ask user if they want to play again
     print()
-
-    rounds_played += 1
-
-    if rounds_played == rounds:
-        break
-
-
-
-if rounds_played > 1:
-    # Ask user if they want to see their game history
-    # if 'yes' show game history
-    show_stats = choice_checker("Would you like to see your"
-                                " end game history? "
+    play_again = choice_checker("Would you like to play again? "
                                 , yes_no_list, y_n_error)
-
-    # Calculate stats and print them out
-    if show_stats == "yes":
-
-
-
-        # Calculate game stat
-        percent_win = rounds_won / rounds_played * 100
-        percent_lose = rounds_lost / rounds_played * 100
-
-        # Displays game history
-        print()
-        print("***** Game History *****")
-        for game in game_summary:
-            print(game)
-
-        print()
-
-        # displays game stats with % values to the nearest whole number
-        print(" ***** Game Statistics *****")
-        print(f"Win: {rounds_won}, {percent_win:.0f}% \nLoss: {rounds_lost}, "
-              f"{percent_lose:.0f}%")
-
-
-    print()
-    print("Thanks for playing the higher lower game :D")
-
 
 # If user hasn't played a round comment
 # Don't give them the option of game history
-elif rounds_played < 1:
+if rounds_played < 1:
+    print()
     print("Maybe play the game next time :)")
-
+else:
+    print()
+    print("Thanks for playing the higher lower game :D")
