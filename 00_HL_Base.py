@@ -267,12 +267,12 @@ while play_again == "yes":
         # Unique relpy if user gets the number first try
         if user_guess == sec_num:
             num_guesses += 1
-            if guesses_left == max_guesses:
+            if num_guesses == 1:
                 print("Amazing!! You got the number first try :D")
 
             else:
-                print(f"** Congrats you got the number "
-                      f"in {num_guesses} guesses **")
+                statement_generator(f"Congrats you got the number "
+                      f"in {num_guesses} guesses", "*", 1)
 
             rounds_won += 1
             result = "won"
@@ -308,14 +308,14 @@ while play_again == "yes":
 
             # Displays game history
             print()
-            print("***** Game History *****")
+            statement_generator("Game History", "-", 3)
             for game in game_summary:
                 print(game)
 
             print()
 
             # displays game stats with % values to the nearest whole number
-            print(" ***** Game Statistics *****")
+            statement_generator("Game Statistics", "-", 3)
             print(f"Win: {rounds_won}, {percent_win:.0f}% \n"
                   f"Loss: {rounds_lost}, "
                   f"{percent_lose:.0f}%")
