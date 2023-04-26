@@ -85,14 +85,13 @@ def statement_generator(statement, decoration, lines=None):
 
     # use 3 lines for headings / heavy decoration
     if lines == 3:
-        print(top_bottom)
-        print(statement)
-        print(top_bottom)
+        new_statement = f"{top_bottom}\n{statement}\n{top_bottom}"
+
     else:
         # default is one single line
-        print(statement)
+        new_statement = statement
 
-    return ""
+    return new_statement
 
 
 # checks users enter an integer between a low and high number
@@ -159,9 +158,11 @@ yes_no_list = ["yes", "no"]
 y_n_error = "Please enter either yes or no"
 low_high_error = "Please choose an integer that is " \
                  "larger than low number"
-# Title
-heading = color_text("Welcome to the Higher Lower Game", 'blue')
-statement_generator(heading,"*", 3)
+
+# Prints title with decorations and color
+title = statement_generator("Welcome to the Higher / Lower Game", "*", 3)
+colour_title = color_text(title, 'cyan')
+
 print()
 
 # Ask user if they have played before
@@ -176,7 +177,6 @@ if played_before == "no":
 play_again = "yes"
 while play_again == "yes":
 
-    # Ask user for # of rounds then loop...
     rounds_played = 0
     rounds_lost = 0
     rounds_won = 0
@@ -199,13 +199,15 @@ while play_again == "yes":
             heading = f"*** Round {rounds_played + 1}" \
                       f" of {rounds} ***"
 
-        print(heading)
+        color_text(heading, 'yellow')
 
         quit_game = input("Press <enter> to continue or 'xxx' to quit: ")
         print()
+        # if they enter 'xxx' game ends
         if quit_game == "xxx":
             break
 
+        # choose the high and low number
         if rounds_played == 0:
             low_num = int_check("Please choose the low number:  ", 0)
             high_num = int_check("Please choose the high number: ", low_num)
@@ -289,19 +291,21 @@ while play_again == "yes":
                 color_text("Amazing!! You got the number first try :D", "green")
 
             else:
-                statement_generator(f"Congrats you got the number "
+                win_statement = statement_generator(f"Congrats you got the number "
                       f"in {num_guesses} guesses", "*", 1)
+                color_win_statement = color_text(win_statement, "green")
+
 
             rounds_won += 1
             result = "won"
 
         if result == "lost":
-            outcome = f"Round {rounds_played + 1}: " \
-                      f"You {result} (to many guesses)"
+            outcome = color_text(f"Round {rounds_played + 1}: " \
+                      f"You {result} (to many guesses)", "red")
 
         else:
-            outcome = f"Round {rounds_played + 1}: You {result} in " \
-                      f"{num_guesses} guesses"
+            outcome = color_text( f"Round {rounds_played + 1}: You {result} in " \
+                      f"{num_guesses} guesses", 'green')
         game_summary.append(outcome)
         print()
 
@@ -326,7 +330,9 @@ while play_again == "yes":
 
             # Displays game history
             print()
-            statement_generator("Game History", "-", 3)
+            game_history = statement_generator("Game History", "-", 3)
+            color_game_history = color_text(game_history, 'cyan')
+
             for game in game_summary:
                 print(game)
 
@@ -334,9 +340,8 @@ while play_again == "yes":
 
             # displays game stats with % values to the nearest whole number
             statement_generator("Game Statistics", "-", 3)
-            print(f"Win: {rounds_won}, {percent_win:.0f}% \n"
-                  f"Loss: {rounds_lost}, "
-                  f"{percent_lose:.0f}%")
+            color_text(f"Win: {rounds_won}, {percent_win:.0f}% \n", 'green')
+            color_text(f"Loss: {rounds_lost}, {percent_lose:.0f}%", 'red')
 
     # Ask user if they want to play again
     print()
