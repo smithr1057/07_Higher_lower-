@@ -251,7 +251,7 @@ while play_again == "yes":
             # checks that guess is not a duplicate
             if user_guess in already_guessed:
                 print(f"You already guessed that number!"
-                      f" Please try again. You *still* have"
+                      f" Please try again.\nYou *still* have"
                       f" {guesses_left} guesses left")
                 continue
 
@@ -277,7 +277,7 @@ while play_again == "yes":
                     rounds_lost += 1
                     num_guesses += 1
 
-                elif user_guess < sec_num:
+                elif user_guess > sec_num:
                     print("Too high!")
                     color_text("You lost, better luck next time", "red")
                     rounds_lost += 1
@@ -333,8 +333,10 @@ while play_again == "yes":
             game_history = statement_generator("Game History", "-", 3)
             color_game_history = color_text(game_history, 'cyan')
 
+            my_string = ""
             for game in game_summary:
-                print(game)
+                my_string += game
+                my_string += "\n"
 
             print()
 
