@@ -1,5 +1,7 @@
 import random
 import math
+
+
 # Functions
 
 
@@ -166,7 +168,7 @@ colour_title = color_text(title, 'cyan')
 print()
 
 # Ask user if they have played before
-# If 'yes', show instructions
+# If 'no', show instructions
 played_before = choice_checker("Have you played the game before? "
                                , yes_no_list,
                                y_n_error)
@@ -203,7 +205,7 @@ while play_again == "yes":
 
         quit_game = input("Press <enter> to continue or 'xxx' to quit: ")
         print()
-        # if they enter 'xxx' game ends
+        # if user enters 'xxx' game ends
         if quit_game == "xxx":
             break
 
@@ -215,9 +217,9 @@ while play_again == "yes":
         else:
             print(f"Number is between {low_num} and {high_num}")
 
+        # Generates secret number
         sec_num = random.randint(low_num, high_num)
         print("spoiler alert", sec_num)
-        # print()
         already_guessed = []
 
         num_guesses = 0
@@ -230,8 +232,8 @@ while play_again == "yes":
 
         guesses_left = max_guesses
 
+        # loop until user guesses number or out of guesses
         user_guess = ""
-
         while user_guess != sec_num and guesses_left >= 1:
 
             if guesses_left == 0:
@@ -259,7 +261,7 @@ while play_again == "yes":
 
             already_guessed.append(user_guess)
 
-            # Compares user guess and secret number to
+            # Compares user guess and secret number
             # respond if user is too low or to high
             if guesses_left >= 1:
 
@@ -268,41 +270,28 @@ while play_again == "yes":
 
                 elif user_guess > sec_num:
                     print("To high, try again")
+                num_guesses += 1
 
             else:
-                if user_guess < sec_num:
-                    print("Too low!")
-
-                elif user_guess > sec_num:
-                    print("Too high!")
-
-                color_text("You lost, better luck next time", "red")
+                color_text(f"You lost, better luck next time", "red")
                 rounds_lost += 1
                 result = "lost"
-            num_guesses += 1
+                num_guesses += 1
 
-        # Unique relpy if user gets the number first try
+        # Unique reply if user gets the number first try
         if user_guess == sec_num:
-            num_guesses += 1
             if num_guesses == 1:
                 color_text("Amazing!! You got the number first try :D", "green")
 
             else:
                 win_statement = statement_generator(f"Congrats you got the number "
-                      f"in {num_guesses} guesses", "*", 1)
+                                                    f"in {num_guesses} guesses", "*", 1)
                 color_win_statement = color_text(win_statement, "green")
-
 
             rounds_won += 1
             result = "won"
 
-        if result == "lost":
-            outcome = color_text(f"Round {rounds_played + 1}: " \
-                      f"You {result} (to many guesses)", "red")
-
-        else:
-            outcome = color_text( f"Round {rounds_played + 1}: You {result} in " \
-                      f"{num_guesses} guesses", 'green')
+        outcome = f"Round {rounds_played + 1}: You {result} with {num_guesses} guesses"
 
         game_summary.append(outcome)
         print()
@@ -331,19 +320,14 @@ while play_again == "yes":
             game_history = statement_generator("Game History", "-", 3)
             color_game_history = color_text(game_history, 'cyan')
 
-            print("Game Summary", game_summary)
-
-            my_string = ""
             for game in game_summary:
-                my_string += game
-                my_string += "\n"
-                print(my_string)
+                print(game)
 
             print()
 
             # displays game stats with % values to the nearest whole number
             statement_generator("Game Statistics", "-", 3)
-            color_text(f"Win: {rounds_won}, {percent_win:.0f}% \n", 'green')
+            color_text(f"Win: {rounds_won}, {percent_win:.0f}%", 'green')
             color_text(f"Loss: {rounds_lost}, {percent_lose:.0f}%", 'red')
 
     # Ask user if they want to play again
@@ -358,4 +342,4 @@ if rounds_played < 1:
     print("Maybe play the game next time :)")
 else:
     print()
-    color_text("Thanks for playing the higher lower game :D", "blue")
+    color_text("Thanks for playing the Higher / Lower Game :D", "blue")
