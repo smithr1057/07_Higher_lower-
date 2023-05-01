@@ -123,7 +123,7 @@ def int_check(question, low=None, high=None):
             elif situation == "low only":
                 if response < low:
                     print("Please enter a number that is more"
-                          f"than (or equal to) {low}")
+                          f"than {low}")
                     continue
 
             return response
@@ -212,7 +212,7 @@ while play_again == "yes":
         # choose the high and low number
         if rounds_played == 0:
             low_num = int_check("Please choose the low number:  ", 0)
-            high_num = int_check("Please choose the high number: ", low_num)
+            high_num = int_check("Please choose the high number: ", low_num + 1)
 
         else:
             print(f"Number is between {low_num} and {high_num}")
